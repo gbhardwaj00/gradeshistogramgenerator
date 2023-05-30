@@ -17,7 +17,12 @@ function adjusHistogram() {
             higherThan++;
         }
         if(higherThan === 0) {
-            bars[0].innerHTML += 'O';
+            if(currentGrade > parseFloat(gradeBounds[higherThan].value)) {
+                continue;
+            }
+            else {
+                bars[0].innerHTML += 'O';
+            }    
         }
         else if(higherThan === gradeBounds.length - 1) {
             if(currentGrade < parseFloat(gradeBounds[higherThan].value)) {
