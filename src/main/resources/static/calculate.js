@@ -5,8 +5,6 @@ var bars = document.getElementsByClassName("length");
 var addGrade = document.getElementById("addGrade");
 var histogram = document.getElementById("histogram");
 
-//delete this later
-var bars2 = document.getElementsByClassName("bar");
 
 function adjusHistogram() {
     for(index in bars){
@@ -20,7 +18,14 @@ function adjusHistogram() {
         }
         if(higherThan === 0) {
             bars[0].innerHTML += 'O';
-            continue;
+        }
+        else if(higherThan === gradeBounds.length - 1) {
+            if(currentGrade < parseFloat(gradeBounds[higherThan].value)) {
+                continue;
+            }
+            else {
+                bars[higherThan - 1].innerHTML += 'O';
+            }
         }
         else {
             bars[higherThan - 1].innerHTML += 'O';
@@ -47,24 +52,20 @@ function boundChanged(input) {
     while(parseFloat(gradeBounds[i].value) != input.value && i < gradeBounds.length - 1){
             i++;
     }
-    console.log(i);
     if(isNaN(parseFloat(gradeBounds[i].oldValue))) {
         i++;
         while(parseFloat(gradeBounds[i].value) != input.value && i < gradeBounds.length - 1){
             i++;
         }
     }
-    console.log(i);
     if(i < gradeBounds.length - 1) {
         if(parseFloat(gradeBounds[i].value) <= parseFloat(gradeBounds[i + 1].value)){
-            console.log("Loop 1");
             alert("Bounds must be in descending order, please enter a valid bound value");
             gradeBounds[i].value = input.oldValue;
         }
     }
     if(i > 0) {
         if(parseFloat(gradeBounds[i].value) >= parseFloat(gradeBounds[i - 1].value)){
-            console.log("Loop 2");
             alert("Bounds must be in descending order, please enter a valid bound value");
             gradeBounds[i].value = input.oldValue;
         }
@@ -81,6 +82,11 @@ addGrade.addEventListener("keyup", (e) => {
     if(e.key == "Enter") {
         if(parseFloat(addGrade.value) > parseFloat(gradeBounds[0].value) || parseFloat(addGrade.value) < parseFloat(gradeBounds[gradeBounds.length - 1].value)){
             alert("New grade is out of bounds");
+            addGrade.value = "";
+            return;
+        }
+        else if(addGrade.value == "") {
+            alert("Please enter a valid grade");
             addGrade.value = "";
             return;
         }
